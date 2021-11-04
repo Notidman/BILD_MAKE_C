@@ -8,9 +8,12 @@ echo " - [Creation of main.c]"
 MAINC=main.c
 (
 cat << 'MAINTXT'
+#include <stdio.h>
+#include <stdlib.h>
+
 int main()
 {
-    return 0;
+    return EXIT_SUCCESS;
 }
 MAINTXT
 ) >$MAINC
