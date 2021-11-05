@@ -50,6 +50,9 @@ if [[ $# -eq 0 ]]; then
 elif [[ $# -gt 1 ]]; then
     echo "Too many arguments!"
     exit 1;
+elif [[ -e $1 ]]; then
+    echo "This build already exists!"
+    exit 1;
 fi
 
 #MAIN
