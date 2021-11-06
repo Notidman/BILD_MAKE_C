@@ -30,10 +30,10 @@ MAKEFILE=Makefile
 (
 cat << 'MAKETXT'
 debug : 
-	gcc -o ./bin/deb ./src/main.c -Wall -Wextra -Wpedantic -std=c18
+	gcc -o ./bin/deb ./src/main.c -g3 -D_FORTIFY_SOURCE=2 -Werror -Wall -Wextra -Wpedantic -std=c18 -Og
 
 release :
-	gcc -o ./bin/res ./src/main.c -O3 -std=c18
+	gcc -o ./bin/res ./src/main.c -O2 -std=c18
 
 dl :
 	-rm -rf ./bin
