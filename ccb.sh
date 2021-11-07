@@ -3,7 +3,7 @@
 #Init main.c
 init_mainc()
 {
-echo " - [Creation of main.c]"
+echo " - [main.c creation]"
 
 MAINC=main.c
 (
@@ -18,13 +18,13 @@ int main(void)
 MAINTXT
 ) >$MAINC
 
-echo " -- main.c creation successfully!" 
+echo " -- main.c was created successfully!" 
 }
 
 #Init Makefile
 init_make() 
 {
-echo " - [Creation of Makefile]"
+echo " - [Makefile creation]"
    
 MAKEFILE=Makefile
 (
@@ -40,7 +40,7 @@ dl :
 MAKETXT
 ) >$MAKEFILE
 
-echo " -- Makefile creation successfully!" 
+echo " -- Makefile was created successfully!" 
 }
 
 #Argument handling 
