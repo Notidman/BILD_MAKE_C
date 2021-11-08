@@ -57,23 +57,44 @@ echo " -- Makefile was created successfully!"
 
 # | Argument handling |===================================================|
 # |=======================================================================|
+valid()
+{
+
+# er(Error) = false;
+er=0
+
+# Checking whether the name is entered or not
 if [[ $# -eq 0 ]]; then
     echo "ERROR: Enter the names of the projects you want to create!"
-    exit 1;
-elif [[ $# -gt 1 ]]; then
-    echo "ERROR: Too many arguments!"
-    exit 1;
-elif [[ -e $1 ]]; then
-    echo "ERROR: This build already exists!"
-    exit 1;
+    er=1 # er = true
 fi
+
+# Checking for one name
+if [[ $# -gt 1 ]]; then
+    echo "ERROR: Too many arguments!"
+    er=1 # er = true
+fi
+
+# Checking if the project exists
+if [[ -e $1 ]]; then
+    echo "ERROR: This build already exists!"
+    er=1 # er = true
+fi
+
+# Сheck that all tests have passed the validation
+if [[ $er -eq 1 ]]; then
+   exit 1
+fi
+}
 # |=======================================================================|
 
 
 # | __MAIN__ |============================================================|
 # |=======================================================================|
-echo "[[ Start building the project! ]]"
 
+valid $@
+
+echo "[[ Start building the project! ]]"
 name_dir=$1;
 
 mkdir "$name_dir";
