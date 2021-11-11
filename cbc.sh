@@ -56,9 +56,9 @@ printf " -- Makefile was created successfully!\n"
 
 # | Init git |============================================================|
 # |=======================================================================|
-init_git() # args programm
+init_git() # no args
 {
-if [[ $@ != *"-nogit"* ]]; then
+if [[ $@ == *"-git"* ]]; then
   printf " - [Git creation]\n"
   git init;
 fi
