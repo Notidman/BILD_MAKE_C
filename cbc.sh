@@ -9,9 +9,9 @@
 
 # | Init main.c |=========================================================|
 # |=======================================================================|
-init_mainc()
+init_mainc() # no args
 {
-echo " - [main.c creation]"
+printf " - [main.c creation]\n"
 
 MAINC=main.c
 (
@@ -26,15 +26,15 @@ int main(void)
 MAINTXT
 ) >$MAINC
 
-echo " -- main.c was created successfully!" 
+printf " -- main.c was created successfully!\n" 
 }
 # |=======================================================================|
 
 # | Init Makefile |=======================================================|
 # |=======================================================================|
-init_make() 
+init_make() # no args
 {
-echo " - [Makefile creation]"
+printf " - [Makefile creation]\n"
    
 MAKEFILE=Makefile
 (
@@ -50,14 +50,25 @@ dl :
 MAKETXT
 ) >$MAKEFILE
 
-echo " -- Makefile was created successfully!" 
+printf " -- Makefile was created successfully!\n" 
 }
 # |=======================================================================|
 
+# | Init git |============================================================|
+# |=======================================================================|
+init_git() # no args
+{
+if [[ $@ != *"-nogit"* ]]; then
+  printf " - [Git creation]\n"
+  git init;
+fi
+
+}
+# |=======================================================================|
 
 # | Argument handling |===================================================|
 # |=======================================================================|
-valid()
+valid() # args programm
 {
 
 # er(Error) = false;
@@ -65,19 +76,19 @@ er=0
 
 # Checking whether the name is entered or not
 if [[ $# -eq 0 ]]; then
-    echo "ERROR: Enter the names of the projects you want to create!"
+    printf "ERROR: Enter the names of the projects you want to create!\n"
     er=1 # er = true
 fi
 
-# Checking for one name
-if [[ $# -gt 1 ]]; then
-    echo "ERROR: Too many arguments!"
-    er=1 # er = true
-fi
+## Checking for one name
+#if [[ $# -gt 1 ]]; then
+#    printf "ERROR: Too many arguments!"
+#    er=1 # er = true
+#fi
 
 # Checking if the project exists
 if [[ -e $1 ]]; then
-    echo "ERROR: This build already exists!"
+    printf "ERROR: This build already exists!\n"
     er=1 # er = true
 fi
 
@@ -94,17 +105,25 @@ fi
 
 valid $@
 
-echo "[[ Start building the project! ]]"
-name_dir=$1;
+printf "[[ Start building the project! ]]\n"
 
-mkdir "$name_dir";
-cd $name_dir;
-mkdir bin src
-init_make
-cd src
-init_mainc
-cd ..
+for name_dir in $@; do
+  if [[ $name_dir == "-"* ]]; then
+    continue;
+  fi
 
-echo "[[ The project was built successfully! ]]"
+  mkdir "$name_dir";
+  cd $name_dir;
+  init_git $@;
+  mkdir bin src;
+  init_make;
+  cd src;
+  init_mainc;
+  cd ..;
+  cd ..;
+
+done
+
+printf "[[ The project was built successfully! ]]\n"
 exit 0;
 # |=======================================================================|
