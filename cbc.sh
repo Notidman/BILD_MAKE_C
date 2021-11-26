@@ -32,21 +32,40 @@ printf " -- main.c was created successfully!\n"
 
 # | Init Makefile |=======================================================|
 # |=======================================================================|
-init_make() # no args
+init_make() # $1 - name programm
 {
 printf " - [Makefile creation]\n"
    
 MAKEFILE=Makefile
 (
-cat << 'MAKETXT'
-debug : 
-	gcc -o ./bin/deb ./src/main.c -g3 -D_FORTIFY_SOURCE=2 -Werror -Wall -Wextra -Wpedantic -std=c18 -Og
+cat << MAKETXT
+TARGET = $1
+PREFIX = /usr/local/bin
+WSRC = ./src
+SRC = main.c
+WOBJS = ./objf
+OBJSF = \$(SRC:.c=.o)
 
-release :
-	gcc -o ./bin/res ./src/main.c -O2 -std=c18
+.PHONY : debug release clear install uninstall go_obj
 
-dl :
-	-rm -rf ./bin
+debug : \$(WSRC)/\$(SRC) go_obj
+	gcc -o ./bin/debug_\$(TARGET) \$(WOBJS)/\$(OBJSF) \
+	-g3 -D_FORTIFY_SOURCE=2 -Werror -Wall -Wextra -Wpedantic -std=c18 -Og
+
+release : \$(WSRC)/\$(SRC) go_obj
+	gcc -o ./bin/release_\$(TARGET) \$(WOBJS)/\$(OBJSF) -O2 -std=c18
+
+go_obj :
+	gcc -c \$(WSRC)/\$(SRC) -o \$(WOBJS)/\$(OBJSF)
+
+clear :
+	rm -rf ./bin/* ./objf/*
+
+install :
+	install \$(TARGET) \$(PREFIX)
+
+uninstall :
+	rm -rf \$(PREFIX)/\$(TARGET)
 MAKETXT
 ) >$MAKEFILE
 
@@ -115,8 +134,8 @@ for name_dir in $@; do
   mkdir "$name_dir";
   cd $name_dir;
   init_git $@;
-  mkdir bin src;
-  init_make;
+  mkdir bin src lib objf;
+  init_make $name_dir;
   cd src;
   init_mainc;
   cd ..;
