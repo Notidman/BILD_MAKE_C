@@ -3,8 +3,11 @@
 # |=======================================================================|
 # | Create Build C (cbc)
 # | Author: Notidman;
-# | Description: 
-# | This program is designed to create a template project with make on c18;
+# | Description:
+# | [[
+# |   This program is designed to create a template project
+# |   with cmake on c18
+# | ]]
 # |=======================================================================|
 
 # | Init main.c |=========================================================|
@@ -26,50 +29,33 @@ int main(void)
 MAINTXT
 ) >$MAINC
 
-printf " -- main.c was created successfully!\n" 
+printf " -- main.c was created successfully!\n"
 }
 # |=======================================================================|
 
-# | Init Makefile |=======================================================|
+# | Init CMakeLists.txt |=================================================|
 # |=======================================================================|
-init_make() # $1 - name programm
+init_cmake() # $1 - name programm
 {
-printf " - [Makefile creation]\n"
-   
-MAKEFILE=Makefile
+printf " - [CMakeLists.txt creation]\n"
+
+CMAKELISTSTXT=CMakeLists.txt
 (
-cat << MAKETXT
-TARGET = $1
-PREFIX = /usr/local/bin
-WSRC = ./src
-SRC = main.c
-WOBJS = ./objf
-OBJSF = \$(SRC:.c=.o)
+cat << CMAKETXT
+cmake_minimum_required(VERSION 3.2)
 
-.PHONY : debug release clear install uninstall go_obj
+include_directories(lib)
+project($1)
 
-debug : \$(WSRC)/\$(SRC) go_obj
-	gcc -o ./bin/debug_\$(TARGET) \$(WOBJS)/\$(OBJSF) \
-	-g3 -D_FORTIFY_SOURCE=2 -Werror -Wall -Wextra -Wpedantic -std=c18 -Og
+set( SRC
+     src/main.c
+   )
 
-release : \$(WSRC)/\$(SRC) go_obj
-	gcc -o ./bin/release_\$(TARGET) \$(WOBJS)/\$(OBJSF) -O2 -std=c18
+add_executable(\${PROJECT_NAME} \${SRC})
+CMAKETXT
+) >$CMAKELISTSTXT
 
-go_obj :
-	gcc -c \$(WSRC)/\$(SRC) -o \$(WOBJS)/\$(OBJSF)
-
-clear :
-	rm -rf ./bin/* ./objf/*
-
-install :
-	install \$(TARGET) \$(PREFIX)
-
-uninstall :
-	rm -rf \$(PREFIX)/\$(TARGET)
-MAKETXT
-) >$MAKEFILE
-
-printf " -- Makefile was created successfully!\n" 
+printf " -- CMakeLists.txt was created successfully!\n"
 }
 # |=======================================================================|
 
@@ -134,8 +120,8 @@ for name_dir in $@; do
   mkdir "$name_dir";
   cd $name_dir;
   init_git $@;
-  mkdir bin src lib objf;
-  init_make $name_dir;
+  mkdir build src lib;
+  init_cmake $name_dir;
   cd src;
   init_mainc;
   cd ..;
