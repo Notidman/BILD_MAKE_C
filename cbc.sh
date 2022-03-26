@@ -59,6 +59,24 @@ printf " -- CMakeLists.txt was created successfully!\n"
 }
 # |=======================================================================|
 
+# | Init run.sh |=========================================================|
+# |=======================================================================|
+init_runsh()  # no args
+{
+printf " - [run.sh creation]\n"
+
+RUNSH=run.sh
+(
+cat << RUNTXT
+#!/bin/bash
+cmake .. && make
+RUNTXT
+) >$RUNSH
+
+printf " -- run.sh was created successfully!\n"
+}
+# |=======================================================================|
+
 # | Init git |============================================================|
 # |=======================================================================|
 init_git() # $@ args
@@ -125,7 +143,10 @@ for name_dir in $@; do
   cd src;
   init_mainc;
   cd ..;
-  cd ..;
+  cd build;
+  init_runsh;
+  chmod +x *;
+  cd ../..;
 
 done
 
