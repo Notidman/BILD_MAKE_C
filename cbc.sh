@@ -22,7 +22,8 @@ cat << 'MAINTXT'
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int 
+main(void)
 {
   return EXIT_SUCCESS;
 }
@@ -61,7 +62,7 @@ printf " -- CMakeLists.txt was created successfully!\n"
 
 # | Init run.sh |=========================================================|
 # |=======================================================================|
-init_runsh()  # no args
+init_runsh() # $1 - name programm
 {
 printf " - [run.sh creation]\n"
 
@@ -69,7 +70,7 @@ RUNSH=run.sh
 (
 cat << RUNTXT
 #!/bin/bash
-cmake .. && make
+cmake .. && make && ./$1
 RUNTXT
 ) >$RUNSH
 
@@ -144,7 +145,7 @@ for name_dir in $@; do
   init_mainc;
   cd ..;
   cd build;
-  init_runsh;
+  init_runsh $name_dir;
   chmod +x *;
   cd ../..;
 
