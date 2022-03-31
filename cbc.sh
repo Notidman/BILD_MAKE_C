@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # |=======================================================================|
-# | Create Build C (cbc)
+# | Create Build C (cbc);
 # | Author: Notidman;
 # | Description:
 # | [[
 # |   This program is designed to create a template project
-# |   with cmake on c18
+# |   with cmake on c/cpp
 # | ]]
 # |=======================================================================|
 
@@ -34,9 +34,33 @@ printf " -- main.c was created successfully!\n"
 }
 # |=======================================================================|
 
-# | Init CMakeLists.txt |=================================================|
+# | Init main.cpp |=========================================================|
 # |=======================================================================|
-init_cmake() # $1 - name programm
+init_maincpp() # no args
+{
+printf " - [main.cpp creation]\n"
+
+MAINCPP=main.cpp
+(
+cat << 'MAINTXT'
+#include <iostream>
+
+int 
+main()
+{
+  return EXIT_SUCCESS;
+}
+MAINTXT
+) >$MAINCPP
+
+printf " -- main.cpp was created successfully!\n"
+}
+# |=======================================================================|
+
+
+# | Init CMakeLists.txt C++ |=============================================|
+# |=======================================================================|
+init_cmake_cpp() # $1 - name programm
 {
 printf " - [CMakeLists.txt creation]\n"
 
@@ -44,15 +68,49 @@ CMAKELISTSTXT=CMakeLists.txt
 (
 cat << CMAKETXT
 cmake_minimum_required(VERSION 3.2)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+project($1 LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20) 
+
+set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -std=c++20 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++20 -O2 -fPIC -march=native -pthread")
 
 include_directories(lib)
-project($1)
+set(PROJECT_SOURCES_DIR src)
+file(GLOB_RECURSE SOURCES \${PROJECT_SOURCES_DIR}/*.cpp)
 
-set( SRC
-     src/main.c
-   )
+add_executable(\${PROJECT_NAME} \${SOURCES})
 
-add_executable(\${PROJECT_NAME} \${SRC})
+CMAKETXT
+) >$CMAKELISTSTXT
+
+printf " -- CMakeLists.txt was created successfully!\n"
+}
+# |=======================================================================|
+
+# | Init CMakeLists.txt C |===============================================|
+# |=======================================================================|
+init_cmake_c() # $1 - name programm
+{
+printf " - [CMakeLists.txt creation]\n"
+
+CMAKELISTSTXT=CMakeLists.txt
+(
+cat << CMAKETXT
+cmake_minimum_required(VERSION 3.2)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+project($1 LANGUAGES C)
+set(CMAKE_CXX_STANDARD 18) 
+
+set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -std=c++18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++18 -O2 -fPIC -march=native -pthread")
+
+include_directories(lib)
+set(PROJECT_SOURCES_DIR src)
+file(GLOB_RECURSE SOURCES \${PROJECT_SOURCES_DIR}/*.c)
+
+add_executable(\${PROJECT_NAME} \${SOURCES})
+
 CMAKETXT
 ) >$CMAKELISTSTXT
 
@@ -80,9 +138,36 @@ printf " -- run.sh was created successfully!\n"
 
 # | Init git |============================================================|
 # |=======================================================================|
+check_ctype() # $@ args
+{
+
+if [[ $@ == *"-c" ]]; then
+  printf " - [C project creation]\n"
+  init_cmake_c $name_dir;
+  cd src;
+  init_mainc;
+  cd ..;
+elif [[ $@ == *"-cpp" ]]; then
+  printf " - [Cpp project creation]\n"
+  init_cmake_cpp $name_dir;
+  cd src;
+  init_maincpp;
+  cd ..;
+else
+  printf " - [C project creation]\n"
+  init_cmake_c $name_dir;
+  cd src;
+  init_mainc;
+  cd ..;
+fi
+}
+# |=======================================================================|
+
+# | Init git |============================================================|
+# |=======================================================================|
 init_git() # $@ args
 {
-if [[ $@ == *"-git"* ]]; then
+if [[ $@ == *"-git" ]]; then
   printf " - [Git creation]\n"
   git init;
 fi
@@ -140,10 +225,7 @@ for name_dir in $@; do
   cd $name_dir;
   init_git $@;
   mkdir build src lib;
-  init_cmake $name_dir;
-  cd src;
-  init_mainc;
-  cd ..;
+  check_ctype $@
   cd build;
   init_runsh $name_dir;
   chmod +x *;
