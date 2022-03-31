@@ -102,8 +102,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project($1 LANGUAGES C)
 set(CMAKE_CXX_STANDARD 18) 
 
-set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -std=c++18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=c++18 -O2 -fPIC -march=native -pthread")
+set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -std=c18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c18 -O2 -fPIC -march=native -pthread")
 
 include_directories(lib)
 set(PROJECT_SOURCES_DIR src)
