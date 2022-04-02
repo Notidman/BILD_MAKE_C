@@ -248,10 +248,10 @@ while true; do
   read answer;
 
   if [[ \$answer == "y"* ]]; then
+    check_success "$1"
     printf " --- [[[ \${CR_LIGHT_CYAN}$1\${CR_END} \${CR_ORANGE}was started\${CR_END}! ]]] ---\n\n"
     ./$1;
     printf "\n";
-    check_success "$1"
     break;
   elif [[ \$answer == "N"* ]]; then
     exit 0;
