@@ -204,13 +204,13 @@ printf " -- ${CR_LIGHT_RED}run.sh${CR_END} ${CR_ORANGE}was created${CR_END} ${CR
 check_ctype() # $@ args
 {
 
-if [[ $@ == *"-c" ]]; then
+if [[ $@ == *"--c" ]]; then
   printf " -- ${CR_LIGHT_CYAN}C${CR_END} ${CR_ORANGE}project creation${CR_END}!\n"
   init_cmake_c $name_dir;
   cd src;
   init_mainc;
   cd ..;
-elif [[ $@ == *"-cpp" ]]; then
+elif [[ $@ == *"--cpp" ]]; then
   printf " -- ${CR_LIGHT_CYAN}CPP${CR_END} ${CR_ORANGE}project creation${CR_END}!\n"
   init_cmake_cpp $name_dir;
   cd src;
@@ -230,7 +230,7 @@ fi
 # |=======================================================================|
 init_git() # $@ args
 {
-if [[ $@ == *"-git" ]]; then
+if [[ $@ == *"--git" ]]; then
   git init;
   printf " -- ${CR_LIGHT_CYAN}Git${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 fi
