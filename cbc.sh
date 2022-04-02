@@ -10,12 +10,43 @@
 # | ]]
 # |=======================================================================|
 
+# | COLOR VARIABLE |======================================================|
+# |=======================================================================|
+#Black        0;30     Dark Gray     1;30
+#Red          0;31     Light Red     1;31
+#Green        0;32     Light Green   1;32
+#Brown/Orange 0;33     Yellow        1;33
+#Blue         0;34     Light Blue    1;34
+#Purple       0;35     Light Purple  1;35
+#Cyan         0;36     Light Cyan    1;36
+#Light Gray   0;37     White         1;37
+
+CR_BLACK="\033[0;30m"; 
+CR_RED="\033[0;31m"; 
+CR_GREEN="\033[0;32m"; 
+CR_ORANGE="\033[0;33m"; 
+CR_BLUE="\033[0;34m"; 
+CR_PURPLE="\033[0;35m"; 
+CR_CYAN="\033[0;36m"; 
+CR_LIGHT_GRAY="\033[0;37m";
+
+CR_DARK_GRAY="\033[1;30m";
+CR_LIGHT_RED="\033[1;31m";
+CR_LIGHT_GREEN="\033[1;32m";
+CR_YELLOW="\033[1;33m";
+CR_LIGHT_BLUE="\033[1;34m";
+CR_LIGHT_PURPLE="\033[1;35m";
+CR_LIGHT_CYAN="\033[1;36m";
+CR_WHITE="\033[1;37m";
+
+CR_END="\033[0m";
+
+# |=======================================================================|
+
 # | Init main.c |=========================================================|
 # |=======================================================================|
 init_mainc() # no args
 {
-printf " - [main.c creation]\n"
-
 MAINC=main.c
 (
 cat << 'MAINTXT'
@@ -30,16 +61,14 @@ main(void)
 MAINTXT
 ) >$MAINC
 
-printf " -- main.c was created successfully!\n"
+printf " -- ${CR_LIGHT_PURPLE}main.c${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 }
 # |=======================================================================|
 
-# | Init main.cpp |=========================================================|
+# | Init main.cpp |=======================================================|
 # |=======================================================================|
 init_maincpp() # no args
 {
-printf " - [main.cpp creation]\n"
-
 MAINCPP=main.cpp
 (
 cat << 'MAINTXT'
@@ -53,7 +82,7 @@ main()
 MAINTXT
 ) >$MAINCPP
 
-printf " -- main.cpp was created successfully!\n"
+printf " -- ${CR_LIGHT_PURPLE}main.cpp${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 }
 # |=======================================================================|
 
@@ -62,8 +91,6 @@ printf " -- main.cpp was created successfully!\n"
 # |=======================================================================|
 init_cmake_cpp() # $1 - name programm
 {
-printf " - [CMakeLists.txt creation]\n"
-
 CMAKELISTSTXT=CMakeLists.txt
 (
 cat << CMAKETXT
@@ -84,7 +111,7 @@ add_executable(\${PROJECT_NAME} \${SOURCES})
 CMAKETXT
 ) >$CMAKELISTSTXT
 
-printf " -- CMakeLists.txt was created successfully!\n"
+printf " -- ${CR_LIGHT_PURPLE}CMakeLists.txt${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 }
 # |=======================================================================|
 
@@ -92,8 +119,6 @@ printf " -- CMakeLists.txt was created successfully!\n"
 # |=======================================================================|
 init_cmake_c() # $1 - name programm
 {
-printf " - [CMakeLists.txt creation]\n"
-
 CMAKELISTSTXT=CMakeLists.txt
 (
 cat << CMAKETXT
@@ -114,7 +139,7 @@ add_executable(\${PROJECT_NAME} \${SOURCES})
 CMAKETXT
 ) >$CMAKELISTSTXT
 
-printf " -- CMakeLists.txt was created successfully!\n"
+printf " -- ${CR_LIGHT_PURPLE}CMakeLists.txt${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 }
 # |=======================================================================|
 
@@ -122,17 +147,55 @@ printf " -- CMakeLists.txt was created successfully!\n"
 # |=======================================================================|
 init_runsh() # $1 - name programm
 {
-printf " - [run.sh creation]\n"
-
 RUNSH=run.sh
 (
 cat << RUNTXT
 #!/bin/bash
-cmake .. && make && ./$1
+
+printf " -- run.sh start\n";
+printf " --- [CMake start]\n";
+cmake ..;
+printf " --- [CMake end]\n";
+
+while true; do
+
+  printf " -- Do you want continue? (y,N)\n";
+  read answer;
+
+  if [[ \$answer == "y"* ]]; then
+    printf " --- [Make start]\n";
+    make;
+    printf " --- [Make end]\n";
+    break;
+  elif [[ \$answer == "N"* ]]; then
+    exit 0;
+  else
+    printf " --- [Incomprehensible characters] '\$answer' ";
+  fi
+done
+
+while true; do
+
+  printf " -- Do you want continue? (y,n)\n";
+  read answer;
+
+  if [[ \$answer == "y"* ]]; then
+    printf " --- [$1 start]\n";
+    ./$1;
+    printf " --- [$1 end]\n";
+    break;
+  elif [[ \$answer == "N"* ]]; then
+    exit 0;
+  else
+    printf " --- [Incomprehensible characters] '\$answer' ";
+  fi
+done
+
+
 RUNTXT
 ) >$RUNSH
 
-printf " -- run.sh was created successfully!\n"
+printf " -- ${CR_LIGHT_RED}run.sh${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 }
 # |=======================================================================|
 
@@ -142,19 +205,19 @@ check_ctype() # $@ args
 {
 
 if [[ $@ == *"-c" ]]; then
-  printf " - [C project creation]\n"
+  printf " -- ${CR_LIGHT_CYAN}C${CR_END} ${CR_ORANGE}project creation${CR_END}!\n"
   init_cmake_c $name_dir;
   cd src;
   init_mainc;
   cd ..;
 elif [[ $@ == *"-cpp" ]]; then
-  printf " - [Cpp project creation]\n"
+  printf " -- ${CR_LIGHT_CYAN}CPP${CR_END} ${CR_ORANGE}project creation${CR_END}!\n"
   init_cmake_cpp $name_dir;
   cd src;
   init_maincpp;
   cd ..;
 else
-  printf " - [C project creation]\n"
+  printf " -- ${CR_LIGHT_CYAN}C${CR_END} ${CR_ORANGE}project creation${CR_END}!\n"
   init_cmake_c $name_dir;
   cd src;
   init_mainc;
@@ -168,8 +231,8 @@ fi
 init_git() # $@ args
 {
 if [[ $@ == *"-git" ]]; then
-  printf " - [Git creation]\n"
   git init;
+  printf " -- ${CR_LIGHT_CYAN}Git${CR_END} ${CR_ORANGE}was created${CR_END} ${CR_GREEN}successfully${CR_END}!\n"
 fi
 
 }
@@ -185,7 +248,7 @@ er=0
 
 # Checking whether the name is entered or not
 if [[ $# -eq 0 ]]; then
-    printf "ERROR: Enter the names of the projects you want to create!\n"
+    printf "[[ ${CR_RED}ERROR:${CR_END} ${CR_ORANGE}Enter the names of the projects you want to create${CR_END}! ]]\n"
     er=1 # er = true
 fi
 
@@ -197,7 +260,7 @@ fi
 
 # Checking if the project exists
 if [[ -e $1 ]]; then
-    printf "ERROR: This build already exists!\n"
+    printf "[[ ${CR_RED}ERROR:${CR_END} ${CR_ORANGE}This build already exists${CR_END}! ]]\n"
     er=1 # er = true
 fi
 
@@ -214,7 +277,7 @@ fi
 
 valid $@
 
-printf "[[ Start building the project! ]]\n"
+printf " --- [[ ${CR_ORANGE}Start building the project${CR_END}! ]] ---\n\n"
 
 for name_dir in $@; do
   if [[ $name_dir == "-"* ]]; then
@@ -233,6 +296,6 @@ for name_dir in $@; do
 
 done
 
-printf "[[ The project was built successfully! ]]\n"
+printf "\n --- [[ ${CR_ORANGE}The project was built${CR_END} ${CR_LIGHT_GREEN}successfully${CR_END}! ]] ---\n"
 exit 0;
 # |=======================================================================|
