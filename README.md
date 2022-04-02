@@ -1,4 +1,4 @@
-![](img/cbc_logo.png)
+![](img/cbc_lg.png)
 # Create Build C (cbc)
  -Bash script for building C/C++ with cmake
 # Description: 
