@@ -164,6 +164,21 @@ check_success "CMakeLists.txt";
 }
 # |=======================================================================|
 
+# | Init clear.sh |=======================================================|
+# |=======================================================================|
+init_clearsh() # no args
+{
+CLEARSH=clear.sh
+(
+cat << CLEARTXT
+rm -rf CMakeCache.txt CMakeFiles cmake_install.cmake compile_commands.json Makefile
+CLEARTXT
+) >$CLEARSH
+
+check_success "clear.sh";
+}
+# |=======================================================================|
+
 # | Init run.sh |=========================================================|
 # |=======================================================================|
 init_runsh() # $1 - name programm
@@ -362,6 +377,7 @@ for name_dir in $@; do
   init_git $@;
   cd build;
   init_runsh $name_dir;
+  init_clearsh;
   chmod +x *;
   cd ../..;
 
