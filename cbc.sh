@@ -2,7 +2,7 @@
 
 # |=======================================================================|
 # | Create Build C (cbc);
-# | Author: Notidman;
+# | Author: Ezi;
 # | Description:
 # | [[
 # |   This program is designed to create a template project
