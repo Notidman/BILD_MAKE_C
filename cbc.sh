@@ -238,8 +238,25 @@ fi
 # | __MAIN__ |============================================================|
 # |=======================================================================|
 printf " --- [[ \${CR_ORANGE}Start run.sh\${CR_END}! ]] ---\n\n"
-cmake ..;
-check_success "CMake";
+
+
+while true; do
+
+  printf " -- \${CR_GREEN}Debug\${CR_END} or \${CR_RED}Release\${CR_END}? (\${CR_GREEN}d\${CR_END},\${CR_RED}r\${CR_END})\n";
+  read answer;
+
+  if [[ \$answer == "d"* ]]; then
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+    check_success "CMake";
+    break;
+  elif [[ \$answer == "r"* ]]; then
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    check_success "CMake";
+    break;
+  else
+    printf " --- [\${CR_RED}Incomprehensible characters\${CR_END}] '\${CR_ORANGE}\$answer\${CR_END}' ";
+  fi
+done
 
 while true; do
 
