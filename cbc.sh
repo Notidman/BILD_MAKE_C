@@ -146,10 +146,10 @@ cat << CMAKETXT
 cmake_minimum_required(VERSION 3.2)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project($1 LANGUAGES C)
-set(CMAKE_CXX_STANDARD 18) 
+set(CMAKE_C_STANDARD 18) 
 
-set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -std=c18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=c18 -O2 -fPIC -march=native -pthread")
+set(CMAKE_C_FLAGS "\${CMAKE_CXX_FLAGS} -std=c18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
+set(CMAKE_C_FLAGS_RELEASE "-std=c18 -O2 -fPIC -march=native -pthread")
 
 include_directories(${DIR_INCLUDE})
 set(PROJECT_SOURCES_DIR ${DIR_SOURCES})
