@@ -12,8 +12,7 @@
 
 # | DIR VARIABLE |========================================================|
 # |=======================================================================|
-DIR_INCLUDE="inc";
-DIR_SOURCES="src";
+DIR_FILES="src";
 DIR_BUILD="build";
 # |=======================================================================|
 
@@ -123,8 +122,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -std=c++20 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-std=c++20 -O2 -fPIC -march=native -pthread")
 
-include_directories(${DIR_INCLUDE})
-set(PROJECT_SOURCES_DIR ${DIR_SOURCES})
+include_directories(${DIR_FILES})
+set(PROJECT_SOURCES_DIR ${DIR_FILES})
 file(GLOB_RECURSE SOURCES \${PROJECT_SOURCES_DIR}/*.cpp)
 
 add_executable(\${PROJECT_NAME} \${SOURCES})
@@ -148,11 +147,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project($1 LANGUAGES C)
 set(CMAKE_C_STANDARD 18) 
 
-set(CMAKE_C_FLAGS "\${CMAKE_CXX_FLAGS} -std=c18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
+set(CMAKE_C_FLAGS "\${CMAKE_C_FLAGS} -std=c18 -Werror -Wall -Wextra -Wpedantic -fPIC -march=native -pthread -g")
 set(CMAKE_C_FLAGS_RELEASE "-std=c18 -O2 -fPIC -march=native -pthread")
 
-include_directories(${DIR_INCLUDE})
-set(PROJECT_SOURCES_DIR ${DIR_SOURCES})
+include_directories(${DIR_FILES})
+set(PROJECT_SOURCES_DIR ${DIR_FILES})
 file(GLOB_RECURSE SOURCES \${PROJECT_SOURCES_DIR}/*.c)
 
 add_executable(\${PROJECT_NAME} \${SOURCES})
@@ -310,19 +309,19 @@ check_ctype() # $@ args
 if [[ $@ == *"--c" ]]; then
   printf " -- [[[  ${CR_LIGHT_CYAN}C${CR_END} ${CR_ORANGE}project creation${CR_END}!  ]]] --\n"
   init_cmake_c $name_dir;
-  cd ${DIR_SOURCES};
+  cd ${DIR_FILES};
   init_mainc;
   cd ..;
 elif [[ $@ == *"--cpp" ]]; then
   printf " -- [[[  ${CR_LIGHT_CYAN}CPP${CR_END} ${CR_ORANGE}project creation${CR_END}!  ]]] --\n"
   init_cmake_cpp $name_dir;
-  cd ${DIR_SOURCES};
+  cd ${DIR_FILES};
   init_maincpp;
   cd ..;
 else
   printf " -- [[[  ${CR_LIGHT_CYAN}C${CR_END} ${CR_ORANGE}project creation${CR_END}!  ]]] --\n"
   init_cmake_c $name_dir;
-  cd ${DIR_SOURCES};
+  cd ${DIR_FILES};
   init_mainc;
   cd ..;
 fi
@@ -389,7 +388,7 @@ for name_dir in $@; do
 
   mkdir "$name_dir";
   cd $name_dir;
-  mkdir ${DIR_BUILD} ${DIR_SOURCES} ${DIR_INCLUDE};
+  mkdir ${DIR_BUILD} ${DIR_FILES};
   check_ctype $@
   init_git $@;
   cd build;
