@@ -302,6 +302,34 @@ fi
 }
 # |=======================================================================|
 
+# | Init .clangd |========================================================|
+# |=======================================================================|
+gen_clangd() # $@ args
+{
+if [[ $@ == *"-v"* && $@ == *"-C"* ]]; then
+CLANGD=.clangd
+(
+cat << CLANGDTXT
+CompileFlags:
+	Add: [-Wall, -Werror, -Wextra, -Wpedantic, -fPIC, -march=native, -g, -std=c++20]
+	Compiler: clang++
+CLANGDTXT
+) >$CLANGD
+elif [[ $@ == *"-v"* && $@ == *"-c"* ]]; then
+CLANGD=.clangd
+(
+cat << CLANGDTXT
+CompileFlags:
+	Add: [-Wall, -Werror, -Wextra, -Wpedantic, -fPIC, -march=native, -g, -std=c18]
+	Compiler: clang
+CLANGDTXT
+) >$CLANGD
+fi
+
+check_success ".clangd";
+}
+# |=======================================================================|
+
 # | Init .gitignore |=====================================================|
 # |=======================================================================|
 init_gitignore() # $@ args
@@ -523,6 +551,8 @@ for name_dir in $@; do
   init_git $@;
   # Make .gitignore
   init_gitignore $@;
+  # Make .clangd for vim
+  gen_clangd $@;
   cd ..;
 
 done

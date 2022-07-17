@@ -6,3 +6,4 @@
  <br>-Add key '-c'   to use C in a project (default)
  <br>-Add key '-C' to use C++ in a project
  <br>-Add key '-g' to enable git
+ <br>-Add key '-v' to enable .clangd for vim
