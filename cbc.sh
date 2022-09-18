@@ -71,9 +71,7 @@ cat << 'MAINTXT'
 #include <stdio.h>
 #include <stdlib.h>
 
-int 
-main(void)
-{
+int main(void) {
   return EXIT_SUCCESS;
 }
 MAINTXT
@@ -92,9 +90,7 @@ MAINCPP=main.cpp
 cat << 'MAINTXT'
 #include <iostream>
 
-int 
-main()
-{
+int main() {
   return EXIT_SUCCESS;
 }
 MAINTXT
@@ -200,7 +196,7 @@ PRF_USERWAY=/usr/local/bin
 # project compiler
 CC=clang
 
-# cpp standart version
+# c standart version
 DEFINES=-std=c18
 
 # project flags release
