@@ -1,13 +1,5 @@
 ![](img/cbc_lg.png)
-# Create Build C (cbc)
-      _                _     
-     | |              | |    
-  ___| |__   ___   ___| |__  
- / __| '_ \ / __| / __| '_ \ 
-| (__| |_) | (__ _\__ \ | | |
- \___|_.__/ \___(_)___/_| |_|
-                             
-                             
+# Create Build C (cbc)                  
  -Bash script for building C/C++ with make
 # Description: 
  -This program is designed to create a template project with make on c18/c++20;
